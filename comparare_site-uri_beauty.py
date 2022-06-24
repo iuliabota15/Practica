@@ -19,6 +19,7 @@ print("Link-ul catre produs pe site-ul Douglas este: ",link_douglas)
 link_notino='https://www.notino.ro/search.asp?exps='+produs.replace(" ","%20")
 print("Link-ul catre produs pe site-ul Notino este: ",link_notino)
 
+
 text=requests.get(link_notino).text
 soup=BeautifulSoup(text,'lxml')
 pret=soup.find('p',class_='price')
@@ -43,6 +44,7 @@ print(vector1[0])
 vector2[0]=vector2[0].replace("\n","")
 print("Pretul produsului pe site-ul Douglas: ")
 print(vector2[0])
+
 if(int(vector1[0])<int(vector2[0])):
     print("Pretul pentru produs este mai ieftin pe site ul Notino ~ ",vector1[0])
 elif(int(vector1[0])==int(vector2[0])):

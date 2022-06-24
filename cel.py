@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from matplotlib import pyplot as plt
+import time
 
 text=requests.get('https://www.cel.ro/laptop-laptopuri/?gclid=Cj0KCQjw2MWVBhCQARIsAIjbwoO5glxWzjX6-0WZ0YNF_xvazUToALwtlFGH2kljl_vY-_PU8S0Os1kaAiyeEALw_wcB').text
 soup=BeautifulSoup(text,'lxml')
@@ -17,14 +18,20 @@ denumiri=soup.find_all('h2',class_='productTitle')
 for course in denumiri:
     denumire.append(course.text)
 
+
+
+f = open("fisier_laptop.txt", "a")
 print("Anunturile sunt // denumire si pret:")
 i=0
 for ceva in denumiri:
     vector.append(denumire[i]+" are pretul de "+pret[i]+" lei")
     if  vector[i]:
-     print(vector[i])
-     i+=1
-
+        f.write(str(i+1))
+        f.write(". ")
+        f.write(vector[i])
+        f.write("\n")
+        i+=1
+f.close()
 print('\n\n\n')
 #sortare crescatoare
 pret_float.sort()
@@ -97,3 +104,34 @@ plt.xlabel('Contor')
 plt.ylabel('Pret')
 plt.title('Top 10 cele mai scumpe vs top 10 cele mai ieftine Laptop-uri')
 plt.show()
+
+
+lista1=[]
+f=open('fisier_laptop.txt','r')
+for intem in denumiri:
+    line=f.readline()
+    index=line.split(". ")[0].replace("\n","")
+    pret=line.split(" ")
+    res = pret[::-1] #reversing using list slicing
+    res=res[1]
+    lista1.append(index+" "+res)
+    
+ok=1
+i=0
+fisier1=""
+fisier2=""
+for item in lista1:
+    index=item.split(" ")[0]
+    pret_lista=item.split(" ")[1]
+    pret_vector=vector[i].split("are pretul de ")[1]
+    pret_vector=pret_vector.split(" ")[0]
+    
+    if(pret_lista!=pret_vector):
+        fisier1=fisier1+str(i+1)+". "+vector[i].split("are pretul de ")[0]+"are pretul de "+pret_vector+" lei \n"
+    else:
+       fisier1=fisier1+str(i+1)+". "+vector[i].split("are pretul de ")[0]+"are pretul de "+pret_vector+" lei \n"
+    i+=1
+
+f=open('fisier_laptop.txt','w')
+f.write(fisier1)
+f.close()
